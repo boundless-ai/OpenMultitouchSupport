@@ -2,8 +2,8 @@
 //  OpenMultitouchSupport.h
 //  OpenMultitouchSupport
 //
-//  Created by Takuto Nakamura on 2019/07/11.
-//  Copyright © 2019 Takuto Nakamura. All rights reserved.
+//  Created by Guillaume Robin on 27/02/2021.
+//  Copyright © 2021 Guillaume Robin. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -15,3 +15,4 @@ FOUNDATION_EXPORT const unsigned char OpenMultitouchSupportVersionString[];
 #import "OpenMTListener.h"
 #import "OpenMTEvent.h"
 #import "OpenMTTouch.h"
+#import "OpenMTDevice.h"

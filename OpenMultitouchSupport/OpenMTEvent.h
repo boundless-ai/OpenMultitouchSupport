@@ -2,14 +2,15 @@
 //  OpenMTEvent.h
 //  OpenMultitouchSupport
 //
-//  Created by Takuto Nakamura on 2019/07/11.
-//  Copyright © 2019 Takuto Nakamura. All rights reserved.
+//  Created by Guillaume Robin on 16/06/2022.
+//  Copyright © 2022 Guillaume Robin. All rights reserved.
 //
 
 #ifndef OpenMTEvent_h
 #define OpenMTEvent_h
 
 #import <Foundation/Foundation.h>
+#import "OpenMTDevice.h"
 
 @interface OpenMTEvent: NSObject
 
@@ -17,6 +18,7 @@
 @property (assign, readonly) int deviceID;
 @property (assign, readonly) int frameID;
 @property (assign, readonly) double timestamp;
+@property (strong, readonly) OpenMTDevicePublic *device;
 
 @end
 

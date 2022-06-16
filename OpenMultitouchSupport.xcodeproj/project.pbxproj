@@ -30,6 +30,8 @@
 		1CD8E68922D7228D00F0A90A /* OpenMTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CD8E68822D7228D00F0A90A /* OpenMTManager.m */; };
 		1CD8E69A22D75C9C00F0A90A /* OpenMTManagerInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CD8E68722D7227A00F0A90A /* OpenMTManagerInternal.h */; };
 		1CD8E69B22D75CBC00F0A90A /* OpenMTTouchInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CD8E67422D718BA00F0A90A /* OpenMTTouchInternal.h */; };
+		A29BB239285BD3CC00CAFE31 /* OpenMTDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A29BB237285BD3CC00CAFE31 /* OpenMTDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A29BB23A285BD3CC00CAFE31 /* OpenMTDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = A29BB238285BD3CC00CAFE31 /* OpenMTDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 		1CD8E68522D7226D00F0A90A /* OpenMTManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenMTManager.h; sourceTree = "<group>"; };
 		1CD8E68722D7227A00F0A90A /* OpenMTManagerInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenMTManagerInternal.h; sourceTree = "<group>"; };
 		1CD8E68822D7228D00F0A90A /* OpenMTManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMTManager.m; sourceTree = "<group>"; };
+		A29BB237285BD3CC00CAFE31 /* OpenMTDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenMTDevice.h; sourceTree = "<group>"; };
+		A29BB238285BD3CC00CAFE31 /* OpenMTDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenMTDevice.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +188,7 @@
 			children = (
 				1CD8E65D22D70E0800F0A90A /* OpenMultitouchSupport.h */,
 				1CD8E66C22D7105100F0A90A /* OpenMTInternal.h */,
+				A29BB23B285BD3D200CAFE31 /* OpenMTDevice */,
 				1C0D09802359C104000A804D /* OpenMTManager */,
 				1C0D09832359C154000A804D /* OpenMTListener */,
 				1C0D09842359C167000A804D /* OpenMTEvent */,
@@ -202,6 +207,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A29BB23B285BD3D200CAFE31 /* OpenMTDevice */ = {
+			isa = PBXGroup;
+			children = (
+				A29BB237285BD3CC00CAFE31 /* OpenMTDevice.h */,
+				A29BB238285BD3CC00CAFE31 /* OpenMTDevice.m */,
+			);
+			name = OpenMTDevice;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -211,6 +225,7 @@
 			files = (
 				1CD8E69A22D75C9C00F0A90A /* OpenMTManagerInternal.h in Headers */,
 				1CD8E65F22D70E0800F0A90A /* OpenMultitouchSupport.h in Headers */,
+				A29BB239285BD3CC00CAFE31 /* OpenMTDevice.h in Headers */,
 				1CD8E68622D7226D00F0A90A /* OpenMTManager.h in Headers */,
 				1CD8E68022D7216300F0A90A /* OpenMTListener.h in Headers */,
 				1CD8E67E22D71E7100F0A90A /* OpenMTEvent.h in Headers */,
@@ -270,7 +285,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1030;
 				LastUpgradeCheck = 1100;
-				ORGANIZATIONNAME = "Takuto Nakamura";
+				ORGANIZATIONNAME = "Guillaume Robin";
 				TargetAttributes = {
 					1CACCE81232A29900044EA02 = {
 						CreatedOnToolsVersion = 10.3;
@@ -338,6 +353,7 @@
 				1CD8E68922D7228D00F0A90A /* OpenMTManager.m in Sources */,
 				1CD8E68422D7218800F0A90A /* OpenMTListener.m in Sources */,
 				1CD8E67122D7187400F0A90A /* OpenMTTouch.m in Sources */,
+				A29BB23A285BD3CC00CAFE31 /* OpenMTDevice.m in Sources */,
 				1CD8E67A22D71E4700F0A90A /* OpenMTEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,7 +552,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = VJ5N2X84K8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -550,7 +566,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kyome.OpenMultitouchSupport;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -568,7 +584,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = VJ5N2X84K8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -582,7 +598,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kyome.OpenMultitouchSupport;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

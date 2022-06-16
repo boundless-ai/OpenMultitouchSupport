@@ -1,23 +1,20 @@
 # OpenMultitouchSupport
+
 This enables you easily to observe global multitouch events on the trackpad (Built-In only).  
 I created this framework to make MultitouchSupport.framework (Private Framework) easy to use.  
 This framework refers to [M5MultitouchSupport.framework](https://github.com/mhuusko5/M5MultitouchSupport) very much.
 This project includes a demo.
 
 ## References
+
 - [natevw / TouchSynthesis](https://github.com/calftrail/Touch/blob/master/TouchSynthesis/MultitouchSupport.h)
 - [asmagill / hammerspoon_asm.undocumented](https://github.com/asmagill/hammerspoon_asm.undocumented/blob/master/touchdevice/MultitouchSupport.h)
 
 ## Installation
 
-### CocoaPods
-```
-pod 'OpenMultitouchSupport'
-```
-
 ### Carthage
 ```
-github "Kyome22/OpenMultitouchSupport"
+github "cesumilo/OpenMultitouchSupport"
 ```
 
 ## Usage (Swift)
@@ -78,4 +75,11 @@ OpenMTState
 .breaking
 .lingering
 .leaving
+
+OpenMTEvent
+.touches // Array of OpenMTTouch
+.deviceID // int
+.frameID // int
+.timestamp // double
+.device // OpenMTDevicePublic*
 ```

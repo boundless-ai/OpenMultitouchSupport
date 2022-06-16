@@ -96,6 +96,9 @@ void MTRegisterMultitouchImageCallback(MTDeviceRef, MTImageCallbackFunction);
 void MTRegisterImageCallback(MTDeviceRef, MTImageCallbackFunction, int, int);
 void MTUnregisterImageCallback(MTDeviceRef, MTImageCallbackFunction);
 
+// test
+CFMutableArrayRef MTDeviceCreateList(void);
+
 #ifdef __cplusplus
 }
 #endif
