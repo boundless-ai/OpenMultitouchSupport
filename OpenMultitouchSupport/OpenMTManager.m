@@ -8,12 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <IOKit/IOKitLib.h>
-#import <IOKit/IOMessage.h>
-#import <IOKit/usb/IOUSBLib.h>
-#import <IOKit/hid/IOHIDManager.h>
-#import <IOKit/hid/IOHIDKeys.h>
-
 #import "OpenMTManagerInternal.h"
 #import "OpenMTListenerInternal.h"
 #import "OpenMTTouchInternal.h"
@@ -168,8 +162,6 @@
     }
     
     [[OpenMTDeviceListener shared] startListening];
-//    [self registerForUSBNotifications];
-//    [self registerForBluetoothNotifications];
     
     return;
 }
@@ -290,91 +282,5 @@ static void contactEventHandler(MTDeviceRef eventDevice, MTTouch eventTouches[],
 //    OpenMTTouch *otouch = [[OpenMTTouch alloc] initWithMTTouch:touch];
 //    [OpenMTManager.sharedManager handlePathEvent:otouch];
 //}
-
-void USBDeviceConnected(void *refcon, io_iterator_t iterator) {
-    io_service_t usbDevice;
-    while ((usbDevice = IOIteratorNext(iterator))) {
-        // Handle the connected device here (e.g., log it or perform some action)
-        NSLog(@"USB device connected");
-        
-        // It's important to release the device object when you're done with it
-        IOObjectRelease(usbDevice);
-    }
-}
-
-void BluetoothDeviceConnected(void *refcon, io_iterator_t iterator) {
-    NSLog(@"in bluetooth device connected function.");
-    
-    io_service_t bluetoothDevice;
-    while ((bluetoothDevice = IOIteratorNext(iterator))) {
-        // Handle the connected device here (e.g., log it or perform some action)
-        NSLog(@"Bluetooth device connected");
-        CFStringRef deviceName = IORegistryEntryCreateCFProperty(bluetoothDevice, CFSTR(kIOHIDProductKey), kCFAllocatorDefault, 0);
-        NSLog(@"Bluetooth device connected: %@", deviceName);
-
-        
-        // It's important to release the device object when you're done with it
-        IOObjectRelease(bluetoothDevice);
-    }
-}
-
-- (void)registerForUSBNotifications {
-    CFMutableDictionaryRef matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
-    if (!matchingDict) {
-        NSLog(@"Failed to create matching dictionary");
-        return;
-    }
-    
-    // Get a reference to the I/O Kit's master port
-    IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
-    CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(notificationPort);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
-    
-    // Register for notifications
-    io_iterator_t deviceAddedIterator;
-    kern_return_t kr = IOServiceAddMatchingNotification(notificationPort,
-                                                        kIOMatchedNotification,
-                                                        matchingDict,
-                                                        USBDeviceConnected, // Callback function
-                                                        NULL, // Context
-                                                        &deviceAddedIterator);
-    if (kr != KERN_SUCCESS) {
-        NSLog(@"Failed to register for device added notifications");
-        return;
-    }
-    
-    // Arm the notification and check for existing devices
-    USBDeviceConnected(NULL, deviceAddedIterator);
-}
-
-- (void)registerForBluetoothNotifications {
-    CFMutableDictionaryRef matchingDict = IOServiceMatching(kIOHIDDeviceKey);
-    if (!matchingDict) {
-        NSLog(@"Failed to create matching dictionary");
-        return;
-    }
-    
-    // Get a reference to the I/O Kit's master port
-    IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
-    CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(notificationPort);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
-    
-    // Register for notifications
-    io_iterator_t deviceAddedIterator;
-    kern_return_t kr = IOServiceAddMatchingNotification(notificationPort,
-                                                        kIOMatchedNotification,
-                                                        matchingDict,
-                                                        BluetoothDeviceConnected, // Callback function
-                                                        NULL, // Context
-                                                        &deviceAddedIterator);
-    if (kr != KERN_SUCCESS) {
-        NSLog(@"Failed to register for device added notifications");
-        return;
-    }
-    
-    // Arm the notification and check for existing devices
-    BluetoothDeviceConnected(NULL, deviceAddedIterator);
-}
-
 
 @end
