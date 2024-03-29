@@ -57,7 +57,7 @@
         NSArray *mtDevices = (NSArray *)CFBridgingRelease(MTDeviceCreateList());
         
         int mtDeviceCount = (int)mtDevices.count;
-        NSLog(@"Number of touchable devices: %d", mtDeviceCount);
+//        NSLog(@"Number of touchable devices: %d", mtDeviceCount);
         
         while (--mtDeviceCount >= 0) {
             id deviceId = mtDevices[mtDeviceCount];
@@ -167,13 +167,19 @@
 }
 
 - (void)deviceConnectedHandler {
-    NSLog(@"New device connected!!!!!!!!!!!!");
-    [[OpenMTDeviceListener shared] stopListening];
+    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC));
+    dispatch_queue_t queue = dispatch_get_main_queue();
+
+    dispatch_after(delay, queue, ^{
+        [self stopHandlingMultitouchEvents];
+        [self startHandlingMultitouchEvents];
+    });
+
 }
 
 - (void)stopHandlingMultitouchEvents {
     int mtDeviceCount = (int)self.multitouchDevices.count;
-    NSLog(@"Number of touchable devices: %d", mtDeviceCount);
+//    NSLog(@"Number of touchable devices: %d", mtDeviceCount);
     
     while (--mtDeviceCount >= 0) {
         OpenMTDevice *mtDevice = self.multitouchDevices[mtDeviceCount];
@@ -194,6 +200,8 @@
             NSLog(@"Failed Stop Handling Multitouch Events");
         }
     }
+
+    [[OpenMTDeviceListener shared] stopListening];
 }
 
 - (void)willSleep:(NSNotification *)note {
