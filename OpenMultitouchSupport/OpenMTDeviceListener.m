@@ -18,10 +18,12 @@
 @interface OpenMTDeviceListener()
 
 @property (strong, nonatomic) NSDate *lastNotificationDate;
-@property (nonatomic, assign) NSTimeInterval debounceInterval;
+@property (assign, nonatomic) NSTimeInterval debounceInterval;
 
 @property (weak, nonatomic) id target;
 @property (assign, nonatomic) SEL selector;
+
+@property (assign, nonatomic) IONotificationPortRef notificationPort;
 
 @end
 
@@ -61,13 +63,13 @@
     }
     
     // Get a reference to the I/O Kit's master port
-    IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
-    CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(notificationPort);
+    self.notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
+    CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(self.notificationPort);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
     
     // Register for notifications
     io_iterator_t usbDeviceAddedIterator;
-    kern_return_t usbKR = IOServiceAddMatchingNotification(notificationPort,
+    kern_return_t usbKR = IOServiceAddMatchingNotification(self.notificationPort,
                                                         kIOMatchedNotification,
                                                         usbDeviceMatchingDict,
                                                         handleDeviceConnected, // Callback function
@@ -79,7 +81,7 @@
     }
     
     io_iterator_t bthDeviceAddedIterator;
-    kern_return_t bthKR = IOServiceAddMatchingNotification(notificationPort,
+    kern_return_t bthKR = IOServiceAddMatchingNotification(self.notificationPort,
                                                         kIOMatchedNotification,
                                                         bthDeviceMatchingDict,
                                                         handleDeviceConnected, // Callback function
@@ -94,8 +96,17 @@
     handleDeviceConnected(NULL, bthDeviceAddedIterator);
 }
 
-- (void)stopListening{
-    
+- (void)stopListening {
+    if (self.notificationPort) {
+        CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(self.notificationPort);
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
+
+        IONotificationPortDestroy(self.notificationPort);
+        self.notificationPort = NULL;
+    }
+
+    self.target = nil;
+    self.selector = NULL;
 }
 
 void handleDeviceConnected(void *refcon, io_iterator_t iterator) {

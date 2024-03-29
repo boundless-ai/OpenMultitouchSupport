@@ -168,6 +168,7 @@
 
 - (void)deviceConnectedHandler {
     NSLog(@"New device connected!!!!!!!!!!!!");
+    [[OpenMTDeviceListener shared] stopListening];
 }
 
 - (void)stopHandlingMultitouchEvents {
