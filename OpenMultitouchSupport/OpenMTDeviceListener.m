@@ -22,7 +22,11 @@
 
 @end
 
-@implementation OpenMTDeviceListener
+@implementation OpenMTDeviceListener {
+@private
+    __weak id _target;
+    SEL _selector;
+}
 
 + (instancetype)shared {
     static OpenMTDeviceListener *shared = nil;
@@ -41,7 +45,10 @@
     return self;
 }
 
-- (void)startListening{
+- (void)startListeningWithTarget:(id)target selector:(SEL)selector {
+    self->_target = target;
+    self->_selector = selector;
+
     CFMutableDictionaryRef usbDeviceMatchingDict = IOServiceMatching(kIOUSBDeviceClassName);
     if (!usbDeviceMatchingDict) {
         NSLog(@"Failed to create matching dictionary");
@@ -84,6 +91,7 @@
         return;
     }
     
+    handleDeviceConnected(NULL, usbDeviceAddedIterator);
     handleDeviceConnected(NULL, bthDeviceAddedIterator);
 }
 
@@ -100,7 +108,14 @@ void handleDeviceConnected(void *refcon, io_iterator_t iterator) {
 
     if (isValidEvent) {
         listener.lastNotificationDate = currentDate;
-        NSLog(@"device connected!!");
+
+        if (listener != nil) {
+            id target = listener->_target;
+            SEL selector = listener->_selector;
+            if (target) {
+                ((void(*)(id, SEL))[target methodForSelector:selector])(target, selector);
+            }
+        }
     }
 
     io_service_t device;

@@ -14,7 +14,7 @@
 
 + (instancetype)shared;
 
-- (void)startListening;
+- (void)startListeningWithTarget:(id)target selector:(SEL)selector;
 - (void)stopListening;
 
 @end

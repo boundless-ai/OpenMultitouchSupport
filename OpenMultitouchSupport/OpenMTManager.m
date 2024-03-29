@@ -161,9 +161,13 @@
         }
     }
     
-    [[OpenMTDeviceListener shared] startListening];
-    
+    [[OpenMTDeviceListener shared] startListeningWithTarget:self selector:@selector(deviceConnectedHandler)];
+
     return;
+}
+
+- (void)deviceConnectedHandler {
+    NSLog(@"New device connected!!!!!!!!!!!!");
 }
 
 - (void)stopHandlingMultitouchEvents {
