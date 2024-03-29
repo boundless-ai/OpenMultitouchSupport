@@ -20,6 +20,7 @@
 #import "OpenMTEventInternal.h"
 #import "OpenMTInternal.h"
 #import "OpenMTDevice.h"
+#import "OpenMTDeviceListenerInternal.h"
 
 @interface OpenMTManager()
 
@@ -166,6 +167,7 @@
         }
     }
     
+    [[OpenMTDeviceListener shared] startListening];
 //    [self registerForUSBNotifications];
 //    [self registerForBluetoothNotifications];
     
