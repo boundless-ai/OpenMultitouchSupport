@@ -20,13 +20,12 @@
 @property (strong, nonatomic) NSDate *lastNotificationDate;
 @property (nonatomic, assign) NSTimeInterval debounceInterval;
 
+@property (weak, nonatomic) id target;
+@property (assign, nonatomic) SEL selector;
+
 @end
 
-@implementation OpenMTDeviceListener {
-@private
-    __weak id _target;
-    SEL _selector;
-}
+@implementation OpenMTDeviceListener
 
 + (instancetype)shared {
     static OpenMTDeviceListener *shared = nil;
@@ -46,8 +45,8 @@
 }
 
 - (void)startListeningWithTarget:(id)target selector:(SEL)selector {
-    self->_target = target;
-    self->_selector = selector;
+    self.target = target;
+    self.selector = selector;
 
     CFMutableDictionaryRef usbDeviceMatchingDict = IOServiceMatching(kIOUSBDeviceClassName);
     if (!usbDeviceMatchingDict) {
@@ -100,28 +99,28 @@
 }
 
 void handleDeviceConnected(void *refcon, io_iterator_t iterator) {
+    io_service_t device;
+    while ((device = IOIteratorNext(iterator))) {
+        IOObjectRelease(device);
+    }
+
     OpenMTDeviceListener *listener = (__bridge OpenMTDeviceListener *)refcon;
+    if (listener == nil) { return; }
 
     NSDate *currentDate = [NSDate date];
     bool isValidEvent = (listener.lastNotificationDate == nil ||
                          [currentDate timeIntervalSinceDate:listener.lastNotificationDate] > listener.debounceInterval);
 
-    if (isValidEvent) {
-        listener.lastNotificationDate = currentDate;
+    if (!isValidEvent) { return; }
 
-        if (listener != nil) {
-            id target = listener->_target;
-            SEL selector = listener->_selector;
-            if (target) {
-                ((void(*)(id, SEL))[target methodForSelector:selector])(target, selector);
-            }
-        }
-    }
+    listener.lastNotificationDate = currentDate;
 
-    io_service_t device;
-    while ((device = IOIteratorNext(iterator))) {
-        IOObjectRelease(device);
-    }
+    id target = listener.target;
+    SEL selector = listener.selector;
+
+    if (!target) { return; }
+
+    ((void(*)(id, SEL))[target methodForSelector:selector])(target, selector);
 }
 
 @end
