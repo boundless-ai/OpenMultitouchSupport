@@ -42,8 +42,6 @@
 }
 
 - (void)startListening{
-    NSLog(@"started listening"); // Debug
-    
     CFMutableDictionaryRef usbDeviceMatchingDict = IOServiceMatching(kIOUSBDeviceClassName);
     if (!usbDeviceMatchingDict) {
         NSLog(@"Failed to create matching dictionary");
@@ -56,8 +54,6 @@
         return;
     }
     
-    NSLog(@"created dictionaries"); // Debug
-
     // Get a reference to the I/O Kit's master port
     IONotificationPortRef notificationPort = IONotificationPortCreate(kIOMasterPortDefault);
     CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(notificationPort);
@@ -76,8 +72,6 @@
         return;
     }
     
-    NSLog(@"registered USB notification"); // Debug
-
     io_iterator_t bthDeviceAddedIterator;
     kern_return_t bthKR = IOServiceAddMatchingNotification(notificationPort,
                                                         kIOMatchedNotification,
@@ -90,8 +84,6 @@
         return;
     }
     
-    NSLog(@"registered BTH notification"); // Debug
-    
     handleDeviceConnected(NULL, bthDeviceAddedIterator);
 }
 
@@ -100,10 +92,19 @@
 }
 
 void handleDeviceConnected(void *refcon, io_iterator_t iterator) {
-    NSLog(@"device connected!!!");
+    OpenMTDeviceListener *listener = (__bridge OpenMTDeviceListener *)refcon;
+
+    NSDate *currentDate = [NSDate date];
+    bool isValidEvent = (listener.lastNotificationDate == nil ||
+                         [currentDate timeIntervalSinceDate:listener.lastNotificationDate] > listener.debounceInterval);
+
+    if (isValidEvent) {
+        listener.lastNotificationDate = currentDate;
+        NSLog(@"device connected!!");
+    }
+
     io_service_t device;
     while ((device = IOIteratorNext(iterator))) {
-        // It's important to release the device object when you're done with it
         IOObjectRelease(device);
     }
 }
